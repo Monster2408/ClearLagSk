@@ -1,6 +1,29 @@
+# yamlの設置場所には気を付けてください
+#
+#  フォルダ
+#   ├ plugins
+#   │  └ clear_lag_sk
+#   │     └ config.yml
+#   │
+#   └ サーバー.jar
+#
+# config.yml の書き方には注意してください
+# 例：
+#
+# NoKill:
+# - 追加したいエンティティ
+# - 追加したいエンティティ
+#      	・
+#      	・
+#      	・
+
 Options:
 #何秒に一度発動するかを設定（デフォルトは３００秒）
 	timespan: 300
+	
+on load:
+	load yaml "plugins/clear_lag_sk/config.yml" as "config"
+	set {NoKill::*} to yaml value "NoKill" from "config"
 
 every second:
 	remove 1 from {clear.lag.time.span}
@@ -10,6 +33,7 @@ every second:
 		set {clear.lag.time.span} to {@timespan}
 	if {clear.lag.time.span} is less than 0:
 		loop all entities:
+			"%{NoKill::*}%" does not contain "%loop-entity%"
 			loop-entity is not a player
 			kill loop-entity
 		set {clear.lag.time.span} to {@timespan}
@@ -44,3 +68,6 @@ command /clearlagsk <text>:
 			stop 
 		if arg-1 is "targetcheck" or "tgc":
 			send "[&cClearLagSK&f] &cあなたは &7%player's target% &cを見ています" to player
+			stop
+		if arg-1 is "entitycheck" or "ec":
+			send "[&cClearLagSK&f] &cキルされる &7%{NoKill::*}% &cを見ています" to player
