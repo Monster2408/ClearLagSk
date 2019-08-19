@@ -1,0 +1,46 @@
+Options:
+#何秒に一度発動するかを設定（デフォルトは３００秒）
+	timespan: 300
+
+every second:
+	remove 1 from {clear.lag.time.span}
+	if {clear.lag.time.span} is 60 or 20:
+		broadcast "[&cClearLagSK&f] &7%{clear.lag.time.span}%&c秒後に ClearLagSK が発動します"
+	if {clear.lag.time.span} is not set:
+		set {clear.lag.time.span} to {@timespan}
+	if {clear.lag.time.span} is less than 0:
+		loop all entities:
+			loop-entity is not a player
+			kill loop-entity
+		set {clear.lag.time.span} to {@timespan}
+		
+command /clearlagsk <text>:
+	usage: /clearlagsk
+	aliases: /clsk, /csk
+	trigger:
+		if arg-1 is "help":
+			send "&6&m                          &c ClearLagSK &6&m                          " to player
+			send "・コマンド" to player
+			send "  /csk help" to player
+			send "    このSkriptの情報を見れます。" to player
+			send "  /csk timecheck" to player
+			send "  /csk tc" to player
+			send "" to player
+			send "・ClearLagSK とは" to player
+			send "  作成者：" to player
+			send "    Monster2408" to player
+			send "  前提PL・アドオン：" to player
+			send "    なし" to player
+			send "  説明：" to player
+			set {_a} to {@timespan}
+			send "    %{_a}% 秒に一度サーバー内のエンティティを削除します。" to player
+			send "&6&m                                                                " to player
+			stop
+		if arg-1 is "timecheck" or "tc":
+			send "[&cClearLagSK&f] &c残り &7%{clear.lag.time.span}% &c秒で ClearLagSK が発動します。" to player
+			stop 
+		if arg-1 is "handcheck" or "hc":
+			send "[&cClearLagSK&f] &cあなたは &7%player's held item% &cを持っています" to player
+			stop 
+		if arg-1 is "targetcheck" or "tgc":
+			send "[&cClearLagSK&f] &cあなたは &7%player's target% &cを見ています" to player
