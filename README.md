@@ -1,1 +1,4 @@
 # ClearLagSk
+ClearLagPluginをSkriptで書いたもの
+
+エンティティをすべて消すようになってるためいずれ修正します。
